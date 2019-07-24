@@ -10,7 +10,7 @@ type Object map[string]interface{}
 
 // Response ...
 type Response struct {
-	Code int
+	Code int         `json:"-"`
 	Data interface{} `json:"data,omitempty"`
 }
 
