@@ -12,7 +12,7 @@ func Recoverer(next http.Handler) http.Handler {
 				switch err := err.(type) {
 				case error:
 					res := Response{
-						Code: http.StatusInternalServerError,
+						Status: http.StatusInternalServerError,
 						Data: Object{
 							"error": err.Error(),
 						},
@@ -20,7 +20,7 @@ func Recoverer(next http.Handler) http.Handler {
 					res.ServeJSON(w)
 				case string:
 					res := Response{
-						Code: http.StatusInternalServerError,
+						Status: http.StatusInternalServerError,
 						Data: Object{
 							"error": err,
 						},
