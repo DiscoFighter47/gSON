@@ -12,6 +12,7 @@ type Object map[string]interface{}
 type Response struct {
 	Status int         `json:"-"`
 	Data   interface{} `json:"data,omitempty"`
+	Error  *APIerror   `json:"error,omitempty"`
 }
 
 // ServeJSON ...

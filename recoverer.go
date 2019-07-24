@@ -1,6 +1,7 @@
 package gson
 
 import (
+	"errors"
 	"net/http"
 )
 
@@ -10,20 +11,22 @@ func Recoverer(next http.Handler) http.Handler {
 		defer func() {
 			if err := recover(); err != nil {
 				switch err := err.(type) {
+				case *APIerror:
+					res := Response{
+						Status: err.Status,
+						Error:  err,
+					}
+					res.ServeJSON(w)
 				case error:
 					res := Response{
 						Status: http.StatusInternalServerError,
-						Data: Object{
-							"error": err.Error(),
-						},
+						Error:  NewAPIerror("Internal Server Error", http.StatusInternalServerError, err),
 					}
 					res.ServeJSON(w)
 				case string:
 					res := Response{
 						Status: http.StatusInternalServerError,
-						Data: Object{
-							"error": err,
-						},
+						Error:  NewAPIerror("Internal Server Error", http.StatusInternalServerError, errors.New(err)),
 					}
 					res.ServeJSON(w)
 				default:
