@@ -30,16 +30,16 @@ func NewAPIerror(title string, status int, src error, tags ...string) *APIerror 
 }
 
 func (err *APIerror) Error() string {
-	b, _ := json.Marshal(err)
-	return string(b)
+	buf, _ := json.Marshal(err)
+	return string(buf)
 }
 
 // ValidationError ...
 type ValidationError map[string]string
 
 func (err ValidationError) Error() string {
-	b, _ := json.Marshal(err)
-	return string(b)
+	buf, _ := json.Marshal(err)
+	return string(buf)
 }
 
 // Add ...

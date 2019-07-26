@@ -2,6 +2,7 @@ package gson
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -24,5 +25,9 @@ func (res *Response) ServeJSON(w http.ResponseWriter) {
 	w.WriteHeader(res.Status)
 	if err := json.NewEncoder(w).Encode(res); err != nil {
 		panic(err)
+	}
+	buf, err := json.Marshal(res)
+	if err == nil {
+		log.Println("Serving Response:", string(buf))
 	}
 }
