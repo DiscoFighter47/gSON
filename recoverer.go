@@ -30,11 +30,3 @@ func Recoverer(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
-
-func serveError(w http.ResponseWriter, err *APIerror) {
-	res := Response{
-		Status: err.Status,
-		Error:  err,
-	}
-	res.ServeJSON(w)
-}

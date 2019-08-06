@@ -40,3 +40,11 @@ func ServeData(w http.ResponseWriter, data interface{}) {
 	}
 	res.ServeJSON(w)
 }
+
+func serveError(w http.ResponseWriter, err *APIerror) {
+	res := Response{
+		Status: err.Status,
+		Error:  err,
+	}
+	res.ServeJSON(w)
+}
