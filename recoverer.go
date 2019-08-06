@@ -15,25 +15,13 @@ func Recoverer(next http.Handler) http.Handler {
 				log.Println("Error Occurred:", err)
 				switch err := err.(type) {
 				case *APIerror:
-					res := Response{
-						Status: err.Status,
-						Error:  err,
-					}
-					res.ServeJSON(w)
+					serveError(w, err)
 				case error:
-					res := Response{
-						Status: http.StatusInternalServerError,
-						Error:  NewAPIerror("Internal Server Error", http.StatusInternalServerError, err),
-					}
-					res.ServeJSON(w)
 					log.Println(string(debug.Stack()))
+					serveError(w, NewAPIerror("Internal Server Error", http.StatusInternalServerError, err))
 				case string:
-					res := Response{
-						Status: http.StatusInternalServerError,
-						Error:  NewAPIerror("Internal Server Error", http.StatusInternalServerError, errors.New(err)),
-					}
-					res.ServeJSON(w)
 					log.Println(string(debug.Stack()))
+					serveError(w, NewAPIerror("Internal Server Error", http.StatusInternalServerError, errors.New(err)))
 				default:
 					panic(err)
 				}
@@ -41,4 +29,12 @@ func Recoverer(next http.Handler) http.Handler {
 		}()
 		next.ServeHTTP(w, r)
 	})
+}
+
+func serveError(w http.ResponseWriter, err *APIerror) {
+	res := Response{
+		Status: err.Status,
+		Error:  err,
+	}
+	res.ServeJSON(w)
 }

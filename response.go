@@ -31,3 +31,12 @@ func (res *Response) ServeJSON(w http.ResponseWriter) {
 		log.Println("Serving Response:", string(buf))
 	}
 }
+
+// ServeData ...
+func ServeData(w http.ResponseWriter, data interface{}) {
+	res := Response{
+		Status: http.StatusOK,
+		Data:   data,
+	}
+	res.ServeJSON(w)
+}
