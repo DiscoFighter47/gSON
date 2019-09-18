@@ -14,7 +14,7 @@ func RequestLogger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Body != nil {
 			buf, err := ioutil.ReadAll(r.Body)
-			if err == nil {
+			if err == nil && len(buf) != 0 {
 				var objmap map[string]*json.RawMessage
 				if err = json.Unmarshal(buf, &objmap); err == nil {
 					b, err := json.Marshal(objmap)
