@@ -21,6 +21,8 @@ func RequestLogger(next http.Handler) http.Handler {
 					if err == nil {
 						log.Println("Handling Request:", strings.TrimSpace(string(b)))
 					}
+				} else {
+					log.Println("Handling Request:", strings.TrimSpace(string(buf)))
 				}
 				r.Body = ioutil.NopCloser(bytes.NewBuffer(buf))
 			}
