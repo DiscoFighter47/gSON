@@ -3,6 +3,8 @@ package gson
 import (
 	"encoding/json"
 	"net/http"
+
+	gero "github.com/DiscoFighter47/gEro"
 )
 
 // Object ...
@@ -10,9 +12,9 @@ type Object map[string]interface{}
 
 // Response ...
 type Response struct {
-	Status int         `json:"-"`
-	Data   interface{} `json:"data,omitempty"`
-	Error  *APIerror   `json:"error,omitempty"`
+	Status int            `json:"-"`
+	Data   interface{}    `json:"data,omitempty"`
+	Error  *gero.APIerror `json:"error,omitempty"`
 }
 
 // ServeJSON ...
@@ -36,7 +38,7 @@ func ServeData(w http.ResponseWriter, data interface{}) {
 	res.ServeJSON(w)
 }
 
-func serveError(w http.ResponseWriter, err *APIerror) {
+func serveError(w http.ResponseWriter, err *gero.APIerror) {
 	res := Response{
 		Status: err.Status,
 		Error:  err,
