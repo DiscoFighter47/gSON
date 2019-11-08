@@ -10,18 +10,19 @@ import (
 )
 
 func TestServeData(t *testing.T) {
-	t.Run("serve struct", func(t *testing.T) {
-		b := &body{"Hello Universe!"}
-		r := httptest.NewRecorder()
-		gson.ServeData(r, b)
-		assert.Equal(t, http.StatusOK, r.Code)
-		assert.JSONEq(t, `{"data":{"msg":"Hello Universe!"}}`, string(r.Body.Bytes()))
-	})
-
-	t.Run("serve object", func(t *testing.T) {
-		r := httptest.NewRecorder()
-		gson.ServeData(r, gson.Object{"msg": "Hello Universe!"})
-		assert.Equal(t, http.StatusOK, r.Code)
-		assert.JSONEq(t, `{"data":{"msg":"Hello Universe!"}}`, string(r.Body.Bytes()))
-	})
+	testData := []struct {
+		des  string
+		body interface{}
+	}{
+		{"serve struct", &body{"Hello Universe!"}},
+		{"serve object", gson.Object{"msg": "Hello Universe!"}},
+	}
+	for _, td := range testData {
+		t.Run(td.des, func(t *testing.T) {
+			r := httptest.NewRecorder()
+			gson.ServeData(r, td.body)
+			assert.Equal(t, http.StatusOK, r.Code)
+			assert.JSONEq(t, `{"data":{"msg":"Hello Universe!"}}`, string(r.Body.Bytes()))
+		})
+	}
 }
