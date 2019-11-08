@@ -1,9 +1,12 @@
 package gson_test
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	gero "github.com/DiscoFighter47/gEro"
 
 	gson "github.com/DiscoFighter47/gSON"
 	"github.com/stretchr/testify/assert"
@@ -25,4 +28,11 @@ func TestServeData(t *testing.T) {
 			assert.JSONEq(t, `{"data":{"msg":"Hello Universe!"}}`, string(r.Body.Bytes()))
 		})
 	}
+}
+
+func TestServeError(t *testing.T) {
+	r := httptest.NewRecorder()
+	gson.ServeError(r, gero.NewAPIerror("error", http.StatusInternalServerError, fmt.Errorf("demo error"), "tag"))
+	assert.Equal(t, http.StatusInternalServerError, r.Code)
+	assert.JSONEq(t, `{"error":{"title":"error","detail":"demo error","tags":["tag"]}}`, string(r.Body.Bytes()))
 }
